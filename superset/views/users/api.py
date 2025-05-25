@@ -14,6 +14,7 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+import datetime
 from flask import g, redirect, Response
 from flask_appbuilder.api import expose, safe
 from flask_jwt_extended.exceptions import NoAuthorizationError
@@ -98,7 +99,13 @@ class CurrentUserRestApi(BaseSupersetApi):
         user = bootstrap_user_data(g.user, include_perms=True)
         return self.response(200, result=user)
 
+    @expose("/tests/", methods= ("GET",))
+    @safe
+    def get_time(self) -> Response:
+      return self.response(200, result=f"Blueprint reload test: {datetime.now()}")
 
+
+        
 class UserRestApi(BaseSupersetApi):
     """An API to get information about users"""
 

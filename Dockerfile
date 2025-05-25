@@ -32,7 +32,7 @@ ARG BUILD_TRANSLATIONS="false"
 FROM --platform=${BUILDPLATFORM} node:20-bookworm-slim AS superset-node-ci
 ARG BUILD_TRANSLATIONS
 ENV BUILD_TRANSLATIONS=${BUILD_TRANSLATIONS}
-ARG DEV_MODE="false"           # Skip frontend build in dev mode
+ARG DEV_MODE="true"           # Skip frontend build in dev mode
 ENV DEV_MODE=${DEV_MODE}
 
 COPY docker/ /app/docker/
@@ -167,7 +167,7 @@ RUN mkdir -p \
     && touch superset/static/version_info.json
 
 # Install Playwright and optionally setup headless browsers
-ARG INCLUDE_CHROMIUM="true"
+ARG INCLUDE_CHROMIUM="false"
 ARG INCLUDE_FIREFOX="false"
 RUN --mount=type=cache,target=${SUPERSET_HOME}/.cache/uv \
     if [ "$INCLUDE_CHROMIUM" = "true" ] || [ "$INCLUDE_FIREFOX" = "true" ]; then \
