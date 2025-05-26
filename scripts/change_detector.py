@@ -34,10 +34,6 @@ PATTERNS = {
         r"^requirements/.+\.txt",
         r"^.pylintrc",
     ],
-    "frontend": [
-        r"^\.github/workflows/.*(bashlib|frontend|e2e)",
-        r"^superset-frontend/",
-    ],
     "docker": [
         r"^Dockerfile$",
         r"^docker.*",

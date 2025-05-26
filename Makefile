@@ -46,10 +46,8 @@ superset:
 	# Load some data to play with
 	superset load-examples
 
-	# Install node packages
-	cd superset-frontend; npm ci
 
-update: update-py update-js
+update: update-py
 
 update-py:
 	# Install external dependencies
@@ -63,11 +61,6 @@ update-py:
 
 	# Create default roles and permissions
 	superset init
-
-update-js:
-	# Install js packages
-	cd superset-frontend; npm ci
-
 venv:
 	# Create a virtual environment and activate it (recommended)
 	if ! [ -x "${PYTHON}" ]; then echo "You need Python 3.10 or 3.11 installed"; exit 1; fi
@@ -82,33 +75,11 @@ pre-commit:
 	pip3 install -r requirements/development.txt
 	pre-commit install
 
-format: py-format js-format
-
 py-format: pre-commit
 	pre-commit run black --all-files
 
-js-format:
-	cd superset-frontend; npm run prettier
-
 flask-app:
 	flask run -p 8088 --with-threads --reload --debugger
-
-node-app:
-	cd superset-frontend; npm run dev-server
-
-build-cypress:
-	cd superset-frontend; npm run build-instrumented
-	cd superset-frontend/cypress-base; npm ci
-
-open-cypress:
-	if ! [ $(port) ]; then cd superset-frontend/cypress-base; CYPRESS_BASE_URL=http://localhost:9000 npm run cypress open; fi
-	cd superset-frontend/cypress-base; CYPRESS_BASE_URL=http://localhost:$(port) npm run cypress open
-
-report-celery-worker:
-	celery --app=superset.tasks.celery_app:app worker
-
-report-celery-beat:
-	celery --app=superset.tasks.celery_app:app beat --pidfile /tmp/celerybeat.pid --schedule /tmp/celerybeat-schedulecd
 
 admin-user:
 	superset fab create-admin
